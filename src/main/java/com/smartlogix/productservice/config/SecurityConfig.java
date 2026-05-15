@@ -34,20 +34,25 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        //PUBLIC endpoints, GET requests (anyone can view products)
-                        .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
 
                         //Swagger endpoints (public)
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .requestMatchers("/swagger-ui.html").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
 
-                        //PROTECTED endpoints : POST/PUT/DELETE require ADMIN role
+                        //ADMIN: eshops managers/supervisors
+                        //USER: warehouse/eshop employee
+
+                        //Products: only authenticated employees/admin can view
+                        //employees should view inventory, search products and verify stock, but we don't want outsiders viewing our inventory, so are protecting our GET as well.
+                        .requestMatchers(HttpMethod.GET, "/products/**").hasAnyRole("USER", "ADMIN")
+
+                        //PROTECTED endpoints : POST/PUT/DELETE require ADMIN role. Only ADMINs modify inventory
                         .requestMatchers(HttpMethod.POST, "/products/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/products/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/products/**").hasRole("ADMIN")
 
-                        // Any other request needs authentication
+                        //Everything else authenticated
                         .anyRequest().authenticated()
                 )
                 // Add JWT filter before Spring Security's authentication filter
