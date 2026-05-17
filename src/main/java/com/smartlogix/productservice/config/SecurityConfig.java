@@ -45,7 +45,7 @@ public class SecurityConfig {
 
                         //Internal service communication, ORDERSERVICE tells PRODUCTSERVICE to reduce stock once an order has been placed
                         //THIS SPECIFIC MATCHER SHOULD GO FIRST, BECAUSE SPRING CHECKS TOP TO BOTTOM.
-                        .requestMatchers("/products/reduce-stock").permitAll() //can be protected later with service JWTs or API gateway
+                        .requestMatchers(HttpMethod.POST, "/products/reduce-stock").permitAll() //can be protected later with service JWTs or API gateway
 
                         //Products: only authenticated employees/admin can view
                         //employees should view inventory, search products and verify stock, but we don't want outsiders viewing our inventory, so are protecting our GET as well.

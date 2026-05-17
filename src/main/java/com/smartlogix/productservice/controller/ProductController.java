@@ -51,6 +51,7 @@ public class ProductController {
     //this endpoint is an internal endpoint, it is called by ORDERSERVICE via RestTemplate when an order is placed.
     @PostMapping("/reduce-stock")
     public ResponseEntity<Product> reduceStock(@RequestBody StockUpdateRequest request) {
+        System.out.println("REDUCE STOCK HIT"); //to check for errors. If it is printed it means the request is being allowed by security, and the problem is somewhere else
         return ResponseEntity.ok(productService.reduceStock(request));
     }
 
