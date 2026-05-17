@@ -43,11 +43,15 @@ public class SecurityConfig {
                         //ADMIN: eshops managers/supervisors
                         //USER: warehouse/eshop employee
 
+                        //Internal service communication, ORDERSERVICE tells PRODUCTSERVICE to reduce stock once an order has been placed
+                        //THIS SPECIFIC MATCHER SHOULD GO FIRST, BECAUSE SPRING CHECKS TOP TO BOTTOM.
+                        .requestMatchers("/products/reduce-stock").permitAll() //can be protected later with service JWTs or API gateway
+
                         //Products: only authenticated employees/admin can view
                         //employees should view inventory, search products and verify stock, but we don't want outsiders viewing our inventory, so are protecting our GET as well.
                         .requestMatchers(HttpMethod.GET, "/products/**").hasAnyRole("USER", "ADMIN")
 
-                        //PROTECTED endpoints : POST/PUT/DELETE require ADMIN role. Only ADMINs modify inventory
+                        //Manager can create a product, update it or delete from the inventory
                         .requestMatchers(HttpMethod.POST, "/products/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/products/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/products/**").hasRole("ADMIN")
