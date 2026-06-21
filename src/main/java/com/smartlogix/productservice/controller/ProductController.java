@@ -11,6 +11,8 @@ import java.util.List;
 
 
  //@RestController = @Controller + @ResponseBody (returns JSON automatically)
+
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
