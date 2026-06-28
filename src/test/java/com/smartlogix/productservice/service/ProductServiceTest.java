@@ -80,7 +80,7 @@ public class ProductServiceTest {
         RuntimeException ex = assertThrows(RuntimeException.class,
                 () -> productService.reduceStock(request));
 
-        assertTrue(ex.getMessage().contains("NO HAY SUFICIENTE STOCK"),
+        assertTrue(ex.getMessage().contains("No hay suficiente stock"),
                 "Exception message should mention insufficient stock");
 
         // Confirm save was NEVER called ( no stock change should happen)
